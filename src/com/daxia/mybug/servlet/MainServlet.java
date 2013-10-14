@@ -16,14 +16,14 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-	        doService(request);
+	        doService(request, response);
         } catch (Exception e) {
 	        e.printStackTrace();
 	        // 跳转到 显示 错误信息的页面
         }
 	}
 
-	private void doService(HttpServletRequest request) throws Exception {
+	private void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    // 接收到请求，从request里间接得到请求的路径是什么，如 /user/add, /user/delete等
 		String path = extractRequestPath(request);
 		
@@ -37,8 +37,20 @@ public class MainServlet extends HttpServlet {
 			// 转到指定的页面
 		} else if ("/user/xxx".equals(path)) {
 			//
-		} else {
-			// 
+		} else if ("/user/login".equals(path)){
+			UserService userService = new UserService();
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			boolean ok = userService.login(username, password);
+			if (ok) {
+				String message = "ok..........";
+				request.setAttribute("msg", message);
+				request.getRequestDispatcher("../ok.jsp").forward(request, response);
+			} else {
+				String message = "fail..........";
+				request.setAttribute("msg", message);
+				response.sendRedirect("../fail.jsp");
+			}
 		}
     }
 
@@ -50,6 +62,8 @@ public class MainServlet extends HttpServlet {
 	 * @return
 	 */
 	private String extractRequestPath(HttpServletRequest request) {
-	    return null;
+		System.out.println(request.getRequestURL());
+		System.out.println(request.getServletPath());
+		return request.getServletPath().replace(".do", "");
     }
 }

@@ -7,7 +7,7 @@
 <title>Bug管理系统</title>
 </head>
 <body>
-	<form action="bug.jsp" method="post">
+	<form action="user/login.do" method="post">
 		<table>
 			<tr>
 				<td>用户名：</td>
