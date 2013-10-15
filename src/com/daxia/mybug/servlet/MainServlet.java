@@ -18,8 +18,9 @@ public class MainServlet extends HttpServlet {
 		try {
 	        doService(request, response);
         } catch (Exception e) {
-	        e.printStackTrace();
 	        // 跳转到 显示 错误信息的页面
+        	request.setAttribute("msg", e.getMessage());
+        	request.getRequestDispatcher("/common/fail.jsp").forward(request, response);
         }
 	}
 
@@ -35,8 +36,9 @@ public class MainServlet extends HttpServlet {
 			UserService userService = new UserService();
 			userService.add(user);
 			// 转到指定的页面
-		} else if ("/user/xxx".equals(path)) {
+		} else if ("/user/main".equals(path)) {
 			//
+			request.getRequestDispatcher("/user/main.jsp").forward(request, response);
 		} else if ("/user/login".equals(path)){
 			UserService userService = new UserService();
 			String username = request.getParameter("username");
@@ -45,12 +47,14 @@ public class MainServlet extends HttpServlet {
 			if (user != null) {
 				String message = "ok..........";
 				request.setAttribute("msg", message);
-				request.getRequestDispatcher("../ok.jsp").forward(request, response);
+				request.getRequestDispatcher("/common/ok.jsp").forward(request, response);
 			} else {
 				String message = "fail..........";
 				request.setAttribute("msg", message);
-				response.sendRedirect("../fail.jsp");
+				request.getRequestDispatcher("/common/fail.jsp").forward(request, response);
 			}
+		} else if ("/bug/bug".equals(path)) {
+			request.getRequestDispatcher("/bug/bug.jsp").forward(request, response);
 		}
     }
 
