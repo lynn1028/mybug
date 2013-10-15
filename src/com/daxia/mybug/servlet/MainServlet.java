@@ -41,8 +41,8 @@ public class MainServlet extends HttpServlet {
 			UserService userService = new UserService();
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
-			boolean ok = userService.login(username, password);
-			if (ok) {
+			User user = userService.login(username, password);
+			if (user != null) {
 				String message = "ok..........";
 				request.setAttribute("msg", message);
 				request.getRequestDispatcher("../ok.jsp").forward(request, response);
@@ -62,8 +62,6 @@ public class MainServlet extends HttpServlet {
 	 * @return
 	 */
 	private String extractRequestPath(HttpServletRequest request) {
-		System.out.println(request.getRequestURL());
-		System.out.println(request.getServletPath());
 		return request.getServletPath().replace(".do", "");
     }
 }
