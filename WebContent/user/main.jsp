@@ -11,10 +11,13 @@
 
 </head>
 <body>
-	main.jsp
+<h1>主面板</h1>
+<hr/>
+用户：${user.username }, 当前一共有100个未完成的bug
+<hr/>
 	<br/>
 	 <button class="yui3-button" onclick="javascript:location='${ctx}/bug/bug.do';;">我的bug</button>
-	 <button class="yui3-button">新建bug</button>
+	 <button class="yui3-button" onclick="javascript:location='${ctx}/bug/pageAdd.do';;">新建bug</button>
 </body>
 
 <script>

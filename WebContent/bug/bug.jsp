@@ -11,7 +11,24 @@
 
 </head>
 <body>
-	bug.jsp
+	<table>
+		<thead>
+			<th>ID</th>
+			<th>title</th>
+			<th>状态</th>
+			<th>优先级</th>
+		</thead>
+		<tbody>
+			<c:forEach items="${bugs }" var="b">
+			<tr>
+				<td>${b.id }</td>
+				<td>${b.title }</td>
+				<td>${b.status }</td>
+				<td>${b.priority }</td>
+			</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 </body>
 
 <script>

@@ -1,13 +1,18 @@
 package com.daxia.mybug.servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.daxia.mybug.common.BugPriority;
+import com.daxia.mybug.common.BugStatus;
+import com.daxia.mybug.model.Bug;
 import com.daxia.mybug.model.User;
+import com.daxia.mybug.service.BugService;
 import com.daxia.mybug.service.UserService;
 
 public class MainServlet extends HttpServlet {
@@ -18,6 +23,7 @@ public class MainServlet extends HttpServlet {
 		try {
 	        doService(request, response);
         } catch (Exception e) {
+        	e.printStackTrace();
 	        // 跳转到 显示 错误信息的页面
         	request.setAttribute("msg", e.getMessage());
         	request.getRequestDispatcher("/common/fail.jsp").forward(request, response);
@@ -47,14 +53,35 @@ public class MainServlet extends HttpServlet {
 			if (user != null) {
 				String message = "ok..........";
 				request.setAttribute("msg", message);
-				request.getRequestDispatcher("/common/ok.jsp").forward(request, response);
+				request.getSession().setAttribute("user", user);
+				request.getRequestDispatcher("/user/main.jsp").forward(request, response);
 			} else {
-				String message = "fail..........";
+				String message = "用户名或密码错误";
 				request.setAttribute("msg", message);
-				request.getRequestDispatcher("/common/fail.jsp").forward(request, response);
+				request.getRequestDispatcher("/user/login.jsp").forward(request, response);
 			}
 		} else if ("/bug/bug".equals(path)) {
 			request.getRequestDispatcher("/bug/bug.jsp").forward(request, response);
+		} else if ("/bug/pageAdd".equals(path)) {
+			UserService userService = new UserService();
+			List<User> users = userService.findAll();
+			request.setAttribute("users", users);
+			request.setAttribute("priorities", BugPriority.values());
+			request.getRequestDispatcher("/bug/add.jsp").forward(request, response);
+		} else if ("/bug/add".equals(path)) {
+			Bug bug = new Bug();
+			bug.setTitle(request.getParameter("title"));
+			bug.setContent(request.getParameter("content"));
+			bug.setStatus(BugStatus.Active.getValue());
+			bug.setPriority(Integer.parseInt(request.getParameter("priority")));
+			bug.setUserId(Long.parseLong(request.getParameter("userId")));
+			BugService bugService = new BugService();
+			bugService.add(bug);
+		} else if ("/bug/bug".equals(path)) {
+			BugService bugService = new BugService();
+			User user = (User) request.getSession().getAttribute("user");
+			
+			bugService.findByUserId(user.getId());
 		}
     }
 

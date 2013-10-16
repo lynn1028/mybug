@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.daxia.mybug.db.DbUtils;
 import com.daxia.mybug.exception.MyException;
@@ -49,6 +51,33 @@ public class UserDAO {
 			statement.setString(1, user.getUsername());
 			statement.setString(2, user.getPassword());
 			statement.executeUpdate();
+        } catch (SQLException e) {
+        	throw new MyException("查询用户发生异常", e);
+        } finally {
+        	try {
+	            DbUtils.closeConnection(conn);
+            } catch (SQLException e) {
+	            e.printStackTrace();
+            }
+        }
+    }
+
+	public List<User> findAll() {
+		Connection conn = null; 
+		try {
+			conn = DbUtils.getConnection();
+			String sql = "select id, username, password from user";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			List<User> list = new ArrayList<User>();
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getLong("id"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				list.add(user);
+			}
+			return list;
         } catch (SQLException e) {
         	throw new MyException("查询用户发生异常", e);
         } finally {

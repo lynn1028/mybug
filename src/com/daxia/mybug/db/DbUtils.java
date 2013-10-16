@@ -11,13 +11,14 @@ public class DbUtils {
 	
 	static {
 		ds = new BasicDataSource();
-		ds.setUrl("jdbc:mysql://localhost:3306/bug??useUnicode=true&characterEncoding=utf8");
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/mybug??useUnicode=true&characterEncoding=utf8");
 		ds.setUsername("root");
 		ds.setPassword("sa");
 		ds.setMaxActive(20);
 		ds.setMinIdle(2);
 	}
-	
+	   
 	public static Connection getConnection() throws SQLException {
 		return ds.getConnection();
 	}
