@@ -18,6 +18,7 @@ public class DbUtils {
 		ds.setMaxActive(20);
 		ds.setMinIdle(2);
 		// test for it
+		// 哈哈哈哈
 	}
 	   
 	public static Connection getConnection() throws SQLException {
