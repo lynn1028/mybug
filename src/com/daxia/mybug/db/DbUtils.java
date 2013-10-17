@@ -17,6 +17,7 @@ public class DbUtils {
 		ds.setPassword("sa");
 		ds.setMaxActive(20);
 		ds.setMinIdle(2);
+		// test for it
 	}
 	   
 	public static Connection getConnection() throws SQLException {
